@@ -12,7 +12,7 @@ Async non-blocking communication with the niri IPC socket.
 ## Example
 
 ```rust
-use async_niri_socket::{AsyncNetSocket};
+use async_niri_socket::AsyncNetSocket;
 
 type NiriSocket = AsyncNetSocket;
 
