@@ -1,3 +1,4 @@
+#![cfg_attr(docsrs, feature(doc_cfg))]
 //! Non-blocking communication over the niri socket.
 
 use futures_lite::{Stream, stream};
@@ -11,12 +12,14 @@ mod error;
 mod async_net_executor;
 
 #[cfg(feature = "async-net")]
+#[cfg_attr(docsrs, doc(cfg(feature = "async-net")))]
 pub type AsyncNetSocket = Socket<async_net_executor::AsyncNetStream>;
 
 #[cfg(feature = "tokio")]
 mod tokio_executor;
 
 #[cfg(feature = "tokio")]
+#[cfg_attr(docsrs, doc(cfg(feature = "tokio")))]
 pub type TokioSocket = Socket<tokio_executor::TokioStream>;
 
 pub struct Socket<S> {

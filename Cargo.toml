@@ -5,7 +5,13 @@ edition = "2024"
 description = "Non-blocking communication over the niri socket."
 repository = "https://github.com/ZXY595/async-niri-socket"
 license = "GPL-3.0"
+keywords = ["async", "network-programming", "niri", "wayland"]
+categories = ["asynchronous", "network-programming"]
 resolver = "3"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 async-net = { version = "2.0", optional = true }
