@@ -38,3 +38,7 @@ async fn run() -> Result<(), std::io::Error> {
 }
 ```
 
+## Niri Support Matrix
+| async-niri-socket | niri |
+|---------|---------|
+| 0.0.1 | 25.11.0 |
