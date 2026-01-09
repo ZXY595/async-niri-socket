@@ -1,5 +1,6 @@
 use std::io;
 
+#[derive(Debug)]
 pub enum NiriReplyError {
     /// Fail to communicate with Niri because of IO error.
     IO(io::Error),
