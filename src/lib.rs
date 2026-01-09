@@ -2,10 +2,10 @@
 //! Non-blocking communication over the niri socket.
 
 use futures_lite::{Stream, stream};
-use niri_ipc::{Event, Reply, Request, socket::SOCKET_PATH_ENV};
+use niri_ipc::{Event, Reply, Request, Response, socket::SOCKET_PATH_ENV};
 use std::{env, io, path::Path};
 
-use error::IntoEventStreamError;
+pub use error::NiriReplyError;
 mod error;
 
 #[cfg(feature = "async-net")]
@@ -60,8 +60,9 @@ impl<S: SocketStream> Socket<S> {
 
     /// Sends a request to niri and returns the response.
     ///
-    /// This is the async version of [Socket::send](niri_ipc::socket::Socket::send)
-    pub async fn send(&mut self, request: Request) -> Result<Reply, io::Error> {
+    /// This is the async version of [Socket::send](niri_ipc::socket::Socket::send), but with a
+    /// flatten error type [NiriReplyError].
+    pub async fn send(&mut self, request: Request) -> Result<Response, NiriReplyError> {
         let mut buf = serde_json::to_string(&request).unwrap();
         buf.push('\n');
 
@@ -70,7 +71,9 @@ impl<S: SocketStream> Socket<S> {
         buf.clear();
         self.stream.read_line(&mut buf).await?;
 
-        serde_json::from_str(&buf).map_err(From::from)
+        serde_json::from_str::<'_, Reply>(&buf)
+            .map_err(io::Error::from)?
+            .map_err(NiriReplyError::Niri)
     }
 
     /// Send request and reading event stream [`Event`]s from the socket.
@@ -100,10 +103,8 @@ impl<S: SocketStream> Socket<S> {
     /// ```
     pub async fn into_event_stream(
         mut self,
-    ) -> Result<impl Stream<Item = Result<Event, io::Error>>, IntoEventStreamError> {
-        self.send(Request::EventStream)
-            .await?
-            .map_err(IntoEventStreamError::NiriNotHandled)?;
+    ) -> Result<impl Stream<Item = Result<Event, io::Error>>, NiriReplyError> {
+        self.send(Request::EventStream).await?;
         let mut stream = self.stream;
         stream.shutdown_write().await;
         Ok(Self::get_event_stream(stream))
