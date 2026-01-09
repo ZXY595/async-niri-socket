@@ -62,15 +62,15 @@ impl<S: SocketStream> Socket<S> {
     ///
     /// This is the async version of [Socket::send](niri_ipc::socket::Socket::send)
     pub async fn send(&mut self, request: Request) -> Result<Reply, io::Error> {
-        let mut request = serde_json::to_string(&request).unwrap();
-        request.push('\n');
+        let mut buf = serde_json::to_string(&request).unwrap();
+        buf.push('\n');
 
-        self.stream.write_all(request.as_bytes()).await?;
+        self.stream.write_all(buf.as_bytes()).await?;
 
-        request.clear();
-        self.stream.read_line(&mut request).await?;
+        buf.clear();
+        self.stream.read_line(&mut buf).await?;
 
-        serde_json::from_str(&request).map_err(From::from)
+        serde_json::from_str(&buf).map_err(From::from)
     }
 
     /// Send request and reading event stream [`Event`]s from the socket.
