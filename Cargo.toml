@@ -1,6 +1,6 @@
 [package]
 name = "async-niri-socket"
-version = "0.0.2"
+version = "0.0.3"
 edition = "2024"
 description = "Non-blocking communication over the niri socket."
 repository = "https://github.com/ZXY595/async-niri-socket"
