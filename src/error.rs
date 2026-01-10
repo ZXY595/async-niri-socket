@@ -1,10 +1,12 @@
 use std::io;
+use thiserror::Error;
 
-#[derive(Debug)]
+#[derive(Debug, Error)]
 pub enum NiriReplyError {
-    /// Fail to communicate with Niri because of IO error.
+    #[error("Failed to communicate with Niri due to IO error: {0}")]
     IO(io::Error),
     /// Some error message from Niri.
+    #[error("Niri reply with error message: {0}")]
     Niri(String),
 }
 
