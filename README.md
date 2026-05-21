@@ -12,9 +12,7 @@ Async non-blocking communication with the niri IPC socket.
 ## Example
 
 ```rust
-use async_niri_socket::AsyncNetSocket;
-
-type NiriSocket = AsyncNetSocket;
+use async_niri_socket::NiriSocket;
 
 async fn run() -> Result<(), std::io::Error> {
     let mut socket = NiriSocket::connect().await?;
@@ -37,8 +35,3 @@ async fn run() -> Result<(), std::io::Error> {
     Ok(())
 }
 ```
-
-## Niri Support Matrix
-| async-niri-socket | niri |
-|---------|---------|
-| 0.0.1..=0.0.4 | 25.11.0 |

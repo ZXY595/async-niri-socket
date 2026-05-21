@@ -11,16 +11,17 @@ mod error;
 #[cfg(feature = "async-net")]
 mod async_net_executor;
 
-#[cfg(feature = "async-net")]
-#[cfg_attr(docsrs, doc(cfg(feature = "async-net")))]
-pub type AsyncNetSocket = Socket<async_net_executor::AsyncNetStream>;
-
 #[cfg(feature = "tokio")]
 mod tokio_executor;
 
-#[cfg(feature = "tokio")]
-#[cfg_attr(docsrs, doc(cfg(feature = "tokio")))]
-pub type TokioSocket = Socket<tokio_executor::TokioStream>;
+#[cfg(all(feature = "async-net", feature = "tokio"))]
+compile_error!("Cannot enable both async-net and tokio features");
+
+pub type NiriSocket = cfg_select!(
+    feature = "async-net" => { Socket<async_net_executor::AsyncNetStream> }
+    feature = "tokio" => { Socket<tokio_executor::TokioStream> }
+    _ => { compile_error!("Either async-net or tokio feature must be enabled") }
+);
 
 pub struct Socket<S> {
     stream: S,
