@@ -1,4 +1,3 @@
-#![cfg_attr(docsrs, feature(doc_cfg))]
 //! Non-blocking communication over the niri socket.
 
 use futures_lite::{Stream, stream};

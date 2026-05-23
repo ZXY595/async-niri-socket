@@ -1,6 +1,6 @@
 [package]
 name = "async-niri-socket"
-version = "0.0.5+niri.26.4.0"
+version = "0.0.6+niri.26.4.0"
 edition = "2024"
 description = "Non-blocking communication over the niri socket."
 repository = "https://github.com/ZXY595/async-niri-socket"
@@ -10,7 +10,7 @@ categories = ["asynchronous", "network-programming"]
 resolver = "3"
 
 [package.metadata.docs.rs]
-all-features = true
+all-features = false
 rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
